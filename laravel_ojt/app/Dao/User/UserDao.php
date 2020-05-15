@@ -6,6 +6,7 @@ use DB;
 use App\Contracts\Dao\User\UserDaoInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Log;
 
 class UserDao implements UserDaoInterface
 {
