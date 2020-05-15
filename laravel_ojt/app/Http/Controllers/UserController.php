@@ -61,8 +61,30 @@ class UserController extends Controller
             'name' => 'required|unique:users|max:255',
             'email' => 'required|unique:users|max:255',
             'password' => 'required|string|min:8|confirmed',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|required_if:back_image,',
             'type' => 'required',
         ]);
+
+        Log::info($request);
+        Log::info("Image");
+        Log::info($request->image);
+        Log::info("Back Image");
+        Log::info($request->back_image);
+
+        if (!empty($request->image)) {
+            Log::info("Image 1");
+
+            $request->image = $request->image->store('uploads', 'public');
+        } else if (empty($request->image) && !empty($request->back_image)) {
+            Log::info("Image 2");
+
+            $request->image = $request->back_image;
+        } else if (!empty($request->image) && !empty($request->back_image)) {
+            Log::info("Image 3");
+
+            Storage::delete($request->back_image);
+            $request->image = $request->image->store('uploads', 'public');
+        }
 
         session([
             'name' => $request->name,
@@ -73,7 +95,11 @@ class UserController extends Controller
             'ph' => $request->ph,
             'dob' => $request->dob,
             'address' => $request->address,
+            'image' => $request->image,
+            'shouldShow' => false,
         ]);
+        Log::info($request->shouldShow);
+
         return view('users.confirm', compact('request'));
     }
 
@@ -87,6 +113,8 @@ class UserController extends Controller
     {
         //
         $this->userInterface->saveOrUpdateUser($request, Auth::user());
+        Log::info("Save");
+        Log::info($request->shouldShow);
         $request->session()->forget(['name', 'email', 'password', 'password_confirmation', 'type', 'ph', 'dob', 'address', 'image', 'shouldShow']);
         return redirect()->route('users.index');
     }
@@ -152,6 +180,7 @@ class UserController extends Controller
     public function profile(User $user)
     {
         Log::info("profile");
+        Log::info($user);
         return view('users.profile', compact('user'));
     }
 

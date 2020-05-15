@@ -79,7 +79,9 @@
 
                 <div class="form-group input-group">
                     <label class="col-sm-4">Profile Image</label>
-                    <input type="file" id="image" name="image" />
+                    <input type="file" id="image" name="image" onchange="putImage();"/>
+                    <label class="col-sm-4"></label>
+                    {{-- <img src="{{ asset('storage/' . $user->profile) }}" class="img-thumbnail" width="75" /> --}}
                 </div>
 
                 <div class="form-group">
@@ -96,3 +98,19 @@
     </div> 
 </div>
 @endsection
+<script type="text/javascript">
+    function showImage(src, target) {
+        var fr = new FileReader();
+        fr.onload = function(){
+            target.src = fr.result;
+        }
+        document.getElementById("target").style.display = "block";
+        fr.readAsDataURL(src.files[0]);
+    }
+
+    function putImage() {
+        var src = document.getElementById("image");
+        var target = document.getElementById("target");
+        showImage(src, target);
+    }
+</script>

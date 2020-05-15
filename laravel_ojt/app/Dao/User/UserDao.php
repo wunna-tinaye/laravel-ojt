@@ -44,7 +44,7 @@ class UserDao implements UserDaoInterface
       $userE->name = $request->name;
       $userE->email = $request->email;
       $userE->type = $request->type;
-      // $userE->profile = $request->image;
+      $userE->profile = $request->image;
       $userE->phone = $request->ph;
       $userE->address = $request->address;
       $userE->dob = $request->dob;
@@ -57,7 +57,7 @@ class UserDao implements UserDaoInterface
           'email' => $request->email,
           'password' => bcrypt($request->password),
           'type' => $request->type,
-          'profile' => "GG",
+          'profile' => $request->image,
           'phone' => $request->ph,
           'address' => $request->address,
           'dob' => $request->dob,

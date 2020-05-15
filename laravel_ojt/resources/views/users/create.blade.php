@@ -67,16 +67,56 @@
 
                 <div class="form-group input-group">
                     <label class="col-sm-3">Profile Image</label>
+                    @if(!session()->has('shouldShow'))
+                        <input type="file" id="image" name="image" onchange="putImage();"/>
+                    @endif
+                    <input type="hidden" name="back_image" value="{{ session('image') }}"/>
+                    @if(session()->has('image'))
+                        <input type="file" id="image" name="image" accept="image/*" capture style="display:none" onchange="putImage();"/>
+                        <img src="{{ asset('storage/' . session('image')) }}" id="session_image" class="img-thumbnail" width="100" style="cursor:pointer" onmouseover="upload();"/>
+                    @endif
+                    @error('image')
+                        <p class="text-danger">&nbsp;*{{ $message }}</p>
+                    @enderror
                 </div>
                 <div class="form-group offset-sm-3">
                     <img  id="target" width="100" style="display:none;"/>
-                    <input type="file" id="image" name="image"/>
                 </div>
                 
                 <button type="submit" name="action" value="create" class="btn btn-primary offset-md-2">Confirm</button>
-                <button type="reset" class="btn btn-default" onClick="ResetImage();">Clear</button>
+                <button type="reset" class="btn btn-default">Clear</button>
             </form>
         </div>
     </div>
 </div>
 @endsection
+<script type="text/javascript">
+    function showImage(src, target) {
+        var fr = new FileReader();
+        fr.onload = function(){
+            target.src = fr.result;
+        }
+        document.getElementById("target").style.display = "block";
+        document.getElementById("image").style.display = "block";
+        fr.readAsDataURL(src.files[0]);
+        if(src.length === 0) {
+            document.getElementById("target").style.display = "none";
+        }
+        document.getElementById("session_image").style.display = "none";
+    }
+
+    function putImage() {
+        var src = document.getElementById("image");
+        src = document.getElementById("image");
+        var target = document.getElementById("target");
+        showImage(src, target);
+    }
+
+    function upload() {
+        document.getElementById('session_image').addEventListener('click', openDialog);
+    }
+
+    function openDialog() {
+        document.getElementById('image').click();
+    }
+</script>

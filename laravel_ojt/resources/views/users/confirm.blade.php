@@ -29,6 +29,12 @@
                 </div>
 
                 <div class="form-group input-group">
+                    <label class="col-sm-4">Password</label>
+                    <label class="col-sm-4">********</label>
+                    <input type="hidden" name="password" class="form-control col-sm-6" value="{{$request->password}}">
+                </div>
+
+                <div class="form-group input-group">
                     <label class="col-sm-4">Type</label>
                     @if($request->type == config('constants.admin'))
                         <label class="col-sm-4">Admin</label>
@@ -58,9 +64,10 @@
 
                 <div class="form-group input-group">
                     <label class="col-sm-4">Profile Image</label>
-                    <input type="file" id="image" name="image"/>
+                    <img src="{{ asset('storage/' . $request->image) }}" class="img-thumbnail" width="75" />
+                    <input type="hidden" name="image" value="{{$request->image}}"/>
                 </div>
-                <input type="hidden" name="password" class="form-control col-sm-6" value="{{$request->password}}">
+
                 <button class="btn btn-primary offset-md-3" type="submit">Confirm</button>
                 <a href="{{ URL::previous() }}" class="btn btn-default">Cancel</a> 
             </form>

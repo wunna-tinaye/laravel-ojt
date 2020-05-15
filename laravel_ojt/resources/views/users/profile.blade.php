@@ -9,6 +9,11 @@
         <div class="card-body">
             <a class="col-sm-3 offset-sm-6" href="{{ url('/users/' . $user->id . '/edit') }}">Edit</a>
             <div class="form-group input-group">
+                <label class="col-sm-4">Profile Image</label>
+                <img src="{{ asset('storage/' . $user->profile) }}" class="img-thumbnail" width="75" />
+                <input type="hidden" name="image" value="{{$user->image}}"/>
+            </div>
+            <div class="form-group input-group">
                 <label class="col-sm-4">Name </label>
                 <label class="col-sm-4">{{ $user->name }} </label>
             </div>
