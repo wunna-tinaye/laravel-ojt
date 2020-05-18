@@ -6,7 +6,6 @@ use DB;
 use App\Contracts\Dao\User\UserDaoInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Log;
 
 class UserDao implements UserDaoInterface
 {
@@ -84,5 +83,16 @@ class UserDao implements UserDaoInterface
     {
       $user = User::withTrashed()->where('id', $user->id)->first();
       $user->delete();
+    }
+
+    /**
+     * Change Password
+     * @param User $user
+     * @param Request $request
+     */
+    public function updatePassword(Request $request, User $user)
+    {
+      $user->password = bcrypt($request->password);
+      $user->save();
     }
 }

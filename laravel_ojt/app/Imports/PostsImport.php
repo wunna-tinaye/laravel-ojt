@@ -8,7 +8,6 @@ use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Log;
 
 class PostsImport implements ToModel, WithHeadingRow, WithValidation
 {

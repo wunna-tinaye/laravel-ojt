@@ -57,4 +57,14 @@ class UserService implements UserServiceInterface
     public function destoryUser(User $user) {
       return $this->userDao->destoryUser($user);
     }
+
+    /**
+     * update password
+     * @param Request $request
+     * @param User $user
+     */
+    public function updatePassword(Request $request, User $user)
+    {
+      return $this->userDao->updatePassword($request, $user);
+    }
 }

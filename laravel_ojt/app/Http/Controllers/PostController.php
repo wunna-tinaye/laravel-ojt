@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Contracts\Services\Post\PostServiceInterface;
-use Log;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PostsExport;
 use App\Imports\PostsImport;
@@ -103,7 +102,6 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        Log::info("Edit");
         return view('posts.edit', compact('post'));
     }
 
@@ -115,7 +113,6 @@ class PostController extends Controller
      */
     public function updateConfirm(PostRequest $request)
     {
-        Log::info("UpConfirm");
         $validated = $request->validated();
         session([
             'title' => $request->title,
@@ -134,7 +131,6 @@ class PostController extends Controller
      */
      public function update(Request $request, Post $post)
     {
-        Log::info("Update");
         $this->postInterface->saveOrUpdatePost($request, Auth::user());
         $request->session()->forget(['title','description']);
         return redirect()->route('posts.index');
@@ -181,17 +177,16 @@ class PostController extends Controller
     public function import(Request $request) 
     {
         $request->validate([
-    'file' => 'required|max:2048',
-]);
-$save = $request->file->store('uploads_file', 'public');
-try {
-    Excel::import(new PostsImport(), $request->file('file'));
-} catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-    Storage::delete($save);
-    $failures = $e->failures();
-    return back()->with('error', $failures);
-}
-return back();
-
+        'file' => 'required|max:2048',
+    ]);
+    $save = $request->file->store('uploads_file', 'public');
+    try {
+        Excel::import(new PostsImport(), $request->file('file'));
+    } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        Storage::delete($save);
+        $failures = $e->failures();
+        return back()->with('error', $failures);
+    }
+    return back();
     }
 }

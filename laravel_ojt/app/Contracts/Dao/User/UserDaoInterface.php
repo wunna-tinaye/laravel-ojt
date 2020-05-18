@@ -14,4 +14,6 @@ interface UserDaoInterface
   public function findUserById(Request $Request);
   //destory user
   public function destoryUser(User $user);
+  //change password
+  public function updatePassword(Request $Request, User $user);
 }

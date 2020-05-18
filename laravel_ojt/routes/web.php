@@ -37,6 +37,9 @@ Route::get('/users/{user}', 'UserController@profile')->name('users.profile');
 Route::get('/users/{user}/edit', 'UserController@edit')->name('users.edit');
 Route::post('users/{id}/updateConfirm', 'UserController@updateConfirm')->name('users.updateConfirm');
 Route::put('/users/{id}', 'UserController@update')->name('users.update');
+Route::get('/users/{user}/changePassword', 'UserController@changePassword')->name('users.changePwd');
+Route::post('/users/{user}/changePassword', 'UserController@changedPassword')->name('users.changedPwd');
+
 
 
 

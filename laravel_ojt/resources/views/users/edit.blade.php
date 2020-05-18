@@ -78,18 +78,19 @@
                 </div>
 
                 <div class="form-group input-group">
-                    <label class="col-sm-4">Profile Image</label>
-                    <input type="file" id="image" name="image" onchange="putImage();"/>
-                    <label class="col-sm-4"></label>
-                    {{-- <img src="{{ asset('storage/' . $user->profile) }}" class="img-thumbnail" width="75" /> --}}
+                    <label class="col-sm-3">Profile Image</label>
+                    <input type="file" id="image" name="image" accept="image/*" capture style="display:none" onchange="putImage();"/>
+                    <img src="{{ asset('storage/' . $user->profile) }}" id="session_image" class="img-thumbnail" width="100" style="cursor:pointer" onmouseover="upload();"/>
+                    @error('image')
+                        <p class="text-danger">&nbsp;*{{ $message }}</p>
+                    @enderror
                 </div>
-
-                <div class="form-group">
-                    <img class="offset-sm-4" id="target" width="100" style="display:none;"/>
+                <div class="form-group offset-sm-3">
+                    <img  id="target" width="100" style="display:none;"/>
                 </div>
 
                 <div class="form-group input-group">
-                    <a href="#" class="col-sm-4">Change Password</a>
+                    <a href="{{  url('/users/' . $user->id .'/changePassword' ) }}" class="col-sm-4">Change Password</a>
                 </div>
                 <button type="submit" name="action" value="edit" class="btn btn-primary">Confirm</button>
                 <button type="reset" class="btn btn-default">Clear</button>
@@ -105,12 +106,25 @@
             target.src = fr.result;
         }
         document.getElementById("target").style.display = "block";
+        document.getElementById("image").style.display = "block";
         fr.readAsDataURL(src.files[0]);
+        if(src.length === 0) {
+            document.getElementById("target").style.display = "none";
+        }
+        document.getElementById("session_image").style.display = "none";
     }
 
     function putImage() {
         var src = document.getElementById("image");
         var target = document.getElementById("target");
         showImage(src, target);
+    }
+
+    function upload() {
+        document.getElementById('session_image').addEventListener('click', openDialog);
+    }
+
+    function openDialog() {
+        document.getElementById('image').click();
     }
 </script>

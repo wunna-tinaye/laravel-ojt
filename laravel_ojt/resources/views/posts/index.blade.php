@@ -10,7 +10,7 @@
     <form action="{{ route('posts.index')}}" method="get">
         @csrf
         <div class="form-group row">
-            <input type="text" class="form-control col-sm-2" name="search">
+            <input type="text" class="form-control col-sm-4" name="search">
             <input class="btn btn-primary mx-sm-2" type="submit" value="Search">
     </form>
             <a href="{{ url('posts/create') }}" class="btn btn-primary mx-sm-2">Add</a>
