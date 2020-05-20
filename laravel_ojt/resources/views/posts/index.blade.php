@@ -68,7 +68,7 @@
                         </tr>
                         <tr>
                             <td><span class="col-sm-8">Status</span></td>
-                            <td><span class="col-sm-3">{{$post->status}}</span></td>
+                            <td><span class="col-sm-3">{{$post->status == 1 ? 'Active' : 'Unactive'}}</span></td>
                         </tr>
                         <tr>
                             <td><span class="col-sm-6">Post Created User</span></td>

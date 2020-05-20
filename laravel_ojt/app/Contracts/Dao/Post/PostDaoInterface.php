@@ -9,9 +9,9 @@ interface PostDaoInterface
   //get post list by search
   public function getPostListBySearch(Request $request);
   //get find post by id
-  public function findPostById(Request $Request);
+  public function findPostById(Request $request);
   //save post
-  public function saveOrUpdatePost(Request $Request, User $user);
+  public function saveOrUpdatePost(Request $request, User $user);
   //destory post
   public function destoryPost(Post $post);
 }

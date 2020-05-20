@@ -43,8 +43,8 @@ class PostsImport implements ToModel, WithHeadingRow, WithValidation
                 'title' => $row['title'],
                 'description' => $row['description'],
                 'status' => $row['status'],
-                'create_user_id' => $row['create_user_id'],
-                'updated_user_id' => $row['updated_user_id'],
+                'create_user_id' => auth()->user()->id,
+                'updated_user_id' => auth()->user()->id,
             ]);
         }
 

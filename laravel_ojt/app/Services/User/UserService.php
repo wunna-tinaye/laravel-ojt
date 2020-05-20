@@ -42,12 +42,12 @@ class UserService implements UserServiceInterface
 
     /**
       * Find User By Id
-      * @param Request $Request
+      * @param Request $request
       * @return user
       */
-    public function findUserById(Request $Request)
+    public function findUserById(Request $request)
     {
-      return $this->userDao->findUserById($Request);
+      return $this->userDao->findUserById($request);
     }
 
     /**
@@ -66,5 +66,64 @@ class UserService implements UserServiceInterface
     public function updatePassword(Request $request, User $user)
     {
       return $this->userDao->updatePassword($request, $user);
+    }
+
+    /**
+     * create confirm
+     * 
+     * @param Request $request
+     * 
+    */
+    public function confirm(Request $request)
+    {
+      if (!empty($request->image)) {
+          $request->image = $request->image->store('uploads', 'public');
+      } else if (empty($request->image) && !empty($request->back_image)) {
+          $request->image = $request->back_image;
+      } else if (!empty($request->image) && !empty($request->back_image)) {
+          Storage::delete($request->back_image);
+          $request->image = $request->image->store('uploads', 'public');
+      }
+
+      session([
+          'name' => $request->name,
+          'email' => $request->email,
+          'password' => $request->password,
+          'password_confirmation' => $request->password_confirmation,
+          'type' => $request->type,
+          'ph' => $request->ph,
+          'dob' => $request->dob,
+          'address' => $request->address,
+          'image' => $request->image,
+          'shouldShow' => false,
+      ]);
+    }
+
+      /**
+       * update confirm
+       * 
+       * 
+       * @param Request $request
+       * @param User $user
+      */
+    public function updateConfirm(Request $request, User $user) {
+        
+      if (empty($request->image)) {
+          $request->image = $user->profile;
+      } else {
+          $request->image = $request->image->store('uploads', 'public');
+      }
+
+      session([
+          'name' => $request->name,
+          'email' => $request->email,
+          'password' => $request->password,
+          'password_confirmation' => $request->password_confirmation,
+          'type' => $request->type,
+          'ph' => $request->ph,
+          'dob' => $request->dob,
+          'address' => $request->address,
+          'image' => $request->image,
+      ]);
     }
 }

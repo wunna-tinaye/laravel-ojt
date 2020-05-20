@@ -53,7 +53,7 @@
                 <div class="modal fade" id="yourModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                    <div class="modal-header" style="background:lightblue;">
+                    <div class="modal-header" style="background:skyblue;">
                         <h5>User Detail Information</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>

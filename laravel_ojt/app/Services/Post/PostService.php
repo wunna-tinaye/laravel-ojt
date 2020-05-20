@@ -7,6 +7,9 @@ use App\Contracts\Services\Post\PostServiceInterface;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\PostsImport;
+use Illuminate\Support\Facades\Storage;
 
 class PostService implements PostServiceInterface
 {
@@ -33,12 +36,12 @@ class PostService implements PostServiceInterface
 
    /**
     * Find Post By Id
-    * @param Request $Request
+    * @param Request $request
     * @return post
     */
-  public function findPostById(Request $Request)
+  public function findPostById(Request $request)
   {
-    return $this->postDao->findPostById($Request);
+    return $this->postDao->findPostById($request);
   }
 
   /**
@@ -58,5 +61,22 @@ class PostService implements PostServiceInterface
     */
   public function destoryPost(Post $post) {
     return $this->postDao->destoryPost($post);
+  }
+
+    /**
+     * Import file
+     * @param Request $request
+     * @return post
+    */
+  public function import(Request $request){
+    $save = $request->file->store('uploads_file', 'public');
+    try {
+        Excel::import(new PostsImport(), $request->file('file'));
+    } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+        Storage::delete($save);
+        $failures = $e->failures();
+        return back()->with('error', $failures);
+    }
+    return redirect()->route('posts.index');
   }
 }

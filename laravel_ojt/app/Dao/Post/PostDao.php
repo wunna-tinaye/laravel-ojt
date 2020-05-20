@@ -3,8 +3,8 @@
 namespace App\Dao\Post;
 
 use App\Contracts\Dao\Post\PostDaoInterface;
-use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Models\Post;
 use App\Models\User;
 class PostDao implements PostDaoInterface
 {
@@ -14,15 +14,16 @@ class PostDao implements PostDaoInterface
    */
    public function getPostListBySearch(Request $request)
    {
-     return Post::leftJoin('users as u', 'u.id', '=', 'posts.create_user_id')
-                ->when($request->search, function($qr) use ($request) {
-                    $qr->where(function($query) use ($request) {
-                        $query->where('title', 'like', '%' . $request->search . '%')
-                                ->orWhere('description', 'like', '%' . $request->search . '%');
-                    });
-                })->when(auth()->user()->type == config('constants.user'), function($qw) {
-                    $qw->where('posts.create_user_id', '=' , auth()->user()->id);                  
-                })->paginate(auth()->user()->type == config('constants.admin') ? config('constants.admin_pagination_records') : config('constants.user_pagination_records'), array('posts.*', 'u.name as c_name'));
+      $post = Post::leftJoin('users as u', 'u.id', '=', 'posts.create_user_id');
+      if (isset($request->search) && !empty($request->search)) {
+          $post = $post->where('title', 'like', '%' . $request->search . '%')
+                          ->orWhere('description', 'like', '%' . $request->search . '%');
+      }
+      if (auth()->user()->type == config('constants.user')) {
+          $post = $post->where('posts.create_user_id', '=' , auth()->user()->id);
+      }
+
+      return $post->paginate(auth()->user()->type == config('constants.admin') ? config('constants.admin_pagination_records') : config('constants.user_pagination_records'), array('posts.*', 'u.name as c_name'));
     }
   
   /**

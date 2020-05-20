@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         'email' => 'admin@gmail.com',
         'password' => bcrypt('12345678'),
         'type' => 1,
-        'profile' => '',
+        'profile' => 'uploads/ZfSpSBuNGmBmKe7Crpx3hzLBMZrRZ8fu27ar9HaQ.jpeg',
         'phone' => '09987654321',
         'address' => 'Yangon',
         'dob' => '1996-08-23',

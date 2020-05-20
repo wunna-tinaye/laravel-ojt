@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Contracts\Services\User\UserServiceInterface;
@@ -21,21 +22,21 @@ class UserController extends Controller
      */
     public function __construct(UserServiceInterface $userInterface)
     {
+        $this->middleware('auth');
         $this->userInterface = $userInterface;
     }
 
     /**
      * Display a listing of the resource.
      *
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        //
         $request->session()->forget(['name', 'email', 'password', 'password_confirmation', 'type', 'ph', 'dob', 'address', 'image', 'shouldShow']);
         $userList = $this->userInterface->getUserListBySearch($request);
         return view('users.index', compact('userList'));
-
     }
 
     /**
@@ -55,39 +56,13 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-     public function confirm(Request $request)
+     public function confirm(UserRequest $request)
     {
-        $validate = $request->validate([
-            'name' => 'required|unique:users|max:255',
-            'email' => 'required|unique:users|max:255',
+        $request->validate([
             'password' => 'required|string|min:8|confirmed',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|required_if:back_image,',
-            'type' => 'required',
         ]);
-
-
-        if (!empty($request->image)) {
-            $request->image = $request->image->store('uploads', 'public');
-        } else if (empty($request->image) && !empty($request->back_image)) {
-            $request->image = $request->back_image;
-        } else if (!empty($request->image) && !empty($request->back_image)) {
-            Storage::delete($request->back_image);
-            $request->image = $request->image->store('uploads', 'public');
-        }
-
-        session([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-            'password_confirmation' => $request->password_confirmation,
-            'type' => $request->type,
-            'ph' => $request->ph,
-            'dob' => $request->dob,
-            'address' => $request->address,
-            'image' => $request->image,
-            'shouldShow' => false,
-        ]);
-
+        $this->userInterface->confirm($request);
         return view('users.confirm', compact('request'));
     }
 
@@ -124,7 +99,6 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
         return view('users.edit', compact('user'));
     }
 
@@ -149,7 +123,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
         $this->userInterface->destoryUser($user);
         return redirect()->route('users.index');
     }
@@ -171,32 +144,10 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function updateConfirm(Request $request)
+    public function updateConfirm(UserRequest $request)
     {
-        $id = $request->id ? ',' . $request->id : '';
-        $request->validate([
-            'name' => 'required|max:255|unique:users,name'.$id,
-            'email' => 'required|max:255|unique:users,email'.$id,
-            'type' => 'required',
-        ]);  
         $user = $this->userInterface->findUserById($request);
-        if (empty($request->image)) {
-            $request->image = $user->profile;
-        } else {
-            $request->image = $request->image->store('uploads', 'public');
-        }
-
-        session([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-            'password_confirmation' => $request->password_confirmation,
-            'type' => $request->type,
-            'ph' => $request->ph,
-            'dob' => $request->dob,
-            'address' => $request->address,
-            'image' => $request->image
-        ]);
+        $this->userInterface->updateConfirm($request, $user);
         return view('users.confirm', compact('request', 'user'));
     }
 

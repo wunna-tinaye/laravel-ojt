@@ -6,10 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Contracts\Services\Post\PostServiceInterface;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PostsExport;
-use App\Imports\PostsImport;
-use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -23,9 +20,10 @@ class PostController extends Controller
      */
     public function __construct(PostServiceInterface $postInterface)
     {
+        $this->middleware('auth');
+        $this->middleware('checkRoleForPostEdit')->only('edit');
         $this->postInterface = $postInterface;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -34,11 +32,9 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        //
         $request->session()->forget(['title', 'description']);
         $postList = $this->postInterface->getPostListBySearch($request);
         return view('posts.index', compact('postList'));
-
     }
 
     /**
@@ -48,7 +44,6 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
         return view('posts.create');
     }
 
@@ -76,11 +71,9 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $this->postInterface->saveOrUpdatePost($request, Auth::user());
         $request->session()->forget(['title', 'description']);
         return redirect()->route('posts.index');
-
     }
 
     /**
@@ -144,10 +137,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
         $this->postInterface->destoryPost($post);
         return redirect()->route('posts.index');
-
     }
 
     /**
@@ -172,21 +163,14 @@ class PostController extends Controller
      * Import excel save into storage and db
      * @param \Illuminate\Http\Request  $request
      * 
-    * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection
     */
     public function import(Request $request) 
     {
         $request->validate([
         'file' => 'required|max:2048',
     ]);
-    $save = $request->file->store('uploads_file', 'public');
-    try {
-        Excel::import(new PostsImport(), $request->file('file'));
-    } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-        Storage::delete($save);
-        $failures = $e->failures();
-        return back()->with('error', $failures);
-    }
-    return back();
+    $import = $this->postInterface->import($request);
+    return $import;
     }
 }
