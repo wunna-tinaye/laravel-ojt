@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Contracts\Services\Post\PostServiceInterface;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PostsExport;
-use Log;
 
 class PostController extends Controller
 {
@@ -23,7 +22,7 @@ class PostController extends Controller
     public function __construct(PostServiceInterface $postInterface)
     {
         $this->middleware('checkRoleForPostEdit')->only('edit');
-        $this->middleware('checkRoleForPostEdit')->only('create');
+        $this->middleware('checkGuestUser')->only('create');
         $this->postInterface = $postInterface;
     }
 
@@ -97,8 +96,6 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        Log::info("Edit");
-        Log::info($post);
         return view('posts.edit', compact('post'));
     }
 
@@ -110,8 +107,6 @@ class PostController extends Controller
      */
     public function updateConfirm(PostRequest $request)
     {
-        Log::info("UPconfirm");
-        Log::info($request);
         $validated = $request->validated();
         session([
             'title' => $request->title,
@@ -131,8 +126,6 @@ class PostController extends Controller
      */
      public function update(Request $request)
     {
-        Log::info("Update");
-        Log::info($request);
         $this->postInterface->saveOrUpdatePost($request, Auth::user());
         $request->session()->forget(['title','description','status']);
         return redirect()->route('posts.index');

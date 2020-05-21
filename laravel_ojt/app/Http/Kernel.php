@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'checkuser' => \App\Http\Middleware\CheckUser::class,
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         'checkRoleForPostEdit' => \App\Http\Middleware\CheckRoleForPostEdit::class,
+        'checkGuestUser' => \App\Http\Middleware\CheckGuestUser::class,
     ];
 }
