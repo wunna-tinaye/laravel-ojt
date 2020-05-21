@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Contracts\Services\Post\PostServiceInterface;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PostsExport;
+use Log;
 
 class PostController extends Controller
 {
@@ -20,8 +22,8 @@ class PostController extends Controller
      */
     public function __construct(PostServiceInterface $postInterface)
     {
-        $this->middleware('auth');
         $this->middleware('checkRoleForPostEdit')->only('edit');
+        $this->middleware('checkRoleForPostEdit')->only('create');
         $this->postInterface = $postInterface;
     }
 
@@ -32,7 +34,7 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $request->session()->forget(['title', 'description']);
+        $request->session()->forget(['title', 'description', 'status']);
         $postList = $this->postInterface->getPostListBySearch($request);
         return view('posts.index', compact('postList'));
     }
@@ -49,8 +51,8 @@ class PostController extends Controller
 
     /**
      * Show the form for post confimation
-     * @param App\Http\Requests\PostRequest $request
      * 
+     * @param App\Http\Requests\PostRequest $request
      * @return \Illuminate\Http\Response
      */
     public function confirm(PostRequest $request)
@@ -95,6 +97,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        Log::info("Edit");
+        Log::info($post);
         return view('posts.edit', compact('post'));
     }
 
@@ -106,10 +110,13 @@ class PostController extends Controller
      */
     public function updateConfirm(PostRequest $request)
     {
+        Log::info("UPconfirm");
+        Log::info($request);
         $validated = $request->validated();
         session([
             'title' => $request->title,
-            'description' => $request->description
+            'description' => $request->description,
+            'status' => $request->status,
         ]);
         $post = $this->postInterface->findPostById($request);
         return view('posts.confirm', compact('request', 'post'));
@@ -122,10 +129,12 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-     public function update(Request $request, Post $post)
+     public function update(Request $request)
     {
+        Log::info("Update");
+        Log::info($request);
         $this->postInterface->saveOrUpdatePost($request, Auth::user());
-        $request->session()->forget(['title','description']);
+        $request->session()->forget(['title','description','status']);
         return redirect()->route('posts.index');
     }
 
@@ -142,15 +151,17 @@ class PostController extends Controller
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * Export excel from db
+     * 
+     * @return \Illuminate\Support\Collection
+     */
     public function export() 
     {
         return Excel::download(new PostsExport, 'posts.xlsx');
     }
 
     /**
-     * Show the upload form.
+     * Show the upload form to input file.
      * 
      * @return \Illuminate\Http\Response
      */
@@ -161,10 +172,10 @@ class PostController extends Controller
 
     /**
      * Import excel save into storage and db
-     * @param \Illuminate\Http\Request  $request
      * 
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Support\Collection
-    */
+     */
     public function import(Request $request) 
     {
         $request->validate([

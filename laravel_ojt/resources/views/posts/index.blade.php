@@ -13,8 +13,10 @@
             <input type="text" class="form-control col-sm-4" name="search">
             <input class="btn btn-primary mx-sm-2" type="submit" value="Search">
     </form>
+        @if(Auth::user() != null)
             <a href="{{ url('posts/create') }}" class="btn btn-primary mx-sm-2">Add</a>
             <a href="{{ url('upload') }}" class="btn btn-primary mx-sm-2">Upload</a>
+        @endif
             <a href="{{ route('export') }}" class="btn btn-primary mx-sm-2">Download</a>
         </div>
         <table class="table">
@@ -35,14 +37,16 @@
                     <td style="word-break: break-all;">{{ $post->description }}</td>
                     <td>{{ $post->c_name }}</td>
                     <td>{{ $post->created_at->format('d/m/Y') }}</td>
-                    <td><a href="{{ url('/posts/' . $post->id . '/edit') }}">Edit</a></td>      
-                    <td>
-                        <form action="{{ route('posts.destroy', $post->id)}}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger" onclick="return confirm('Are you sure?')" type="submit">Delete</button>
-                        </form>
-                    </td>
+                    @if(Auth::user() != null)
+                        <td><a href="{{ url('/posts/' . $post->id . '/edit') }}">Edit</a></td>  
+                        <td>
+                            <form action="{{ route('posts.destroy', $post->id)}}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger" onclick="return confirm('Are you sure?')" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    @endif    
                 </tr>
             @endforeach
             </tbody>

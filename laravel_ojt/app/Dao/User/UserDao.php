@@ -11,6 +11,7 @@ class UserDao implements UserDaoInterface
 {
   /**
    * Get Operator List
+   * 
    * @param Object
    * @return $operatorList
    */
@@ -33,7 +34,8 @@ class UserDao implements UserDaoInterface
   }
 
   /**
-   * Save Post
+   * Create/Update Post
+   * 
    * @param Object
    */
    public function saveOrUpdateUser(Request $request, User $user)
@@ -68,6 +70,7 @@ class UserDao implements UserDaoInterface
 
     /**
      * Get User
+     * 
      * @return $user
      */
     public function findUserById(Request $request)
@@ -76,7 +79,8 @@ class UserDao implements UserDaoInterface
     }
 
     /**
-     * Delete user
+     * SoftDelete user
+     * 
      * @param User $user
      */
     public function destoryUser(User $user) 
@@ -87,6 +91,7 @@ class UserDao implements UserDaoInterface
 
     /**
      * Change Password
+     * 
      * @param User $user
      * @param Request $request
      */

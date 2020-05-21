@@ -10,24 +10,34 @@ class PostDao implements PostDaoInterface
 {
   /**
    * Get Post List
+   * 
    * @return $postList
    */
    public function getPostListBySearch(Request $request)
    {
       $post = Post::leftJoin('users as u', 'u.id', '=', 'posts.create_user_id');
-      if (isset($request->search) && !empty($request->search)) {
-          $post = $post->where('title', 'like', '%' . $request->search . '%')
-                          ->orWhere('description', 'like', '%' . $request->search . '%');
-      }
-      if (auth()->user()->type == config('constants.user')) {
-          $post = $post->where('posts.create_user_id', '=' , auth()->user()->id);
-      }
+      if(auth()->user()){
+        if (isset($request->search) && !empty($request->search)) {
+            $post = $post->where('title', 'like', '%' . $request->search . '%')
+                            ->orWhere('description', 'like', '%' . $request->search . '%');
+        }
+        if (auth()->user()->type == config('constants.user')) {
+            $post = $post->where('posts.create_user_id', '=' , auth()->user()->id);
+        }
+        return $post->paginate(auth()->user()->type == config('constants.admin') ? config('constants.admin_pagination_records') : config('constants.user_pagination_records'), array('posts.*', 'u.name as c_name'));
+      } else {
+          if (isset($request->search) && !empty($request->search)) {
+              $post = $post->where('title', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%');
+          }
 
-      return $post->paginate(auth()->user()->type == config('constants.admin') ? config('constants.admin_pagination_records') : config('constants.user_pagination_records'), array('posts.*', 'u.name as c_name'));
+        return $post->paginate(config('constants.admin_pagination_records'), array('posts.*', 'u.name as c_name'));
+      }
     }
   
   /**
    * Get Post
+   * 
    * @return $post
    */
   public function findPostById(Request $request)
@@ -36,7 +46,8 @@ class PostDao implements PostDaoInterface
   }
 
   /**
-   * Save Post
+   * Create/Update Post
+   * 
    * @param User $user
    * @param Request $request
    */
@@ -47,7 +58,7 @@ class PostDao implements PostDaoInterface
         $post->title = $request->title;
         $post->description = $request->description;
         $post->updated_user_id = $user->id;
-        if($request->status == "0") {
+        if($request->status == "on") {
           $post->status = 1;
         } else {
           $post->status = 0;
@@ -64,7 +75,8 @@ class PostDao implements PostDaoInterface
    }
 
    /**
-    * Delete post
+    * SoftDelete post
+    *
     * @param Post $post
     */
   public function destoryPost(Post $post) {

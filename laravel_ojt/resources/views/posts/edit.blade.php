@@ -33,13 +33,20 @@
                         <p class="text-danger">&nbsp;*{{ $message }}</p>
                     @enderror
                 </div>
-
+                                
                 <div class="form-group input-group">
                     <label class="col-sm-2"> Status </label>
+                    @if(session()->has('status'))
+                    <label class="switch">
+                        <input type="checkbox" name="status" {{session('status') ? 'checked' : ''}}>
+                        <span class="slider round"></span>
+                    </label>
+                    @else
                     <label class="switch">
                         <input type="checkbox" name="status" {{$post->status ? 'checked' : ''}}>
                         <span class="slider round"></span>
                     </label>
+                    @endif
                 </div>
                 <button type="submit" name="action" value="edit" class="btn btn-primary offset-sm-2">Confirm</button>
                 <input type="reset" class="btn btn-default" value="Reset">

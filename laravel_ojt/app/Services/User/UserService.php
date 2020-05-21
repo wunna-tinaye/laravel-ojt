@@ -14,7 +14,7 @@ class UserService implements UserServiceInterface
   /**
    * Class Constructor
    * @param OperatorUserDaoInterface
-   * @return
+   * @return void
    */
   public function __construct(UserDaoInterface $userDao)
   {
@@ -23,6 +23,7 @@ class UserService implements UserServiceInterface
 
   /**
    * Get User List
+   * 
    * @param Request $request
    * @return $userList
    */
@@ -31,7 +32,8 @@ class UserService implements UserServiceInterface
     return $this->userDao->getUserListBySearch($request);
   }
     /**
-     * save post
+     * Save post
+     * 
      * @param Request $request
      * @param User $user
      */
@@ -42,6 +44,7 @@ class UserService implements UserServiceInterface
 
     /**
       * Find User By Id
+
       * @param Request $request
       * @return user
       */
@@ -51,7 +54,7 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Delete User
+     * SoftDelete User
      * @param User $user
      */
     public function destoryUser(User $user) {
@@ -59,7 +62,8 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * update password
+     * Update password
+     * 
      * @param Request $request
      * @param User $user
      */
@@ -69,7 +73,7 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * create confirm
+     * Create confirm
      * 
      * @param Request $request
      * 
@@ -100,8 +104,7 @@ class UserService implements UserServiceInterface
     }
 
       /**
-       * update confirm
-       * 
+       * Update confirm
        * 
        * @param Request $request
        * @param User $user

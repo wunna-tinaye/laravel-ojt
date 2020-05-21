@@ -18,7 +18,7 @@ class PostService implements PostServiceInterface
   /**
    * Class Constructor
    * @param PostDaoInterface
-   * @return
+   * @return void
    */
   public function __construct(PostDaoInterface $postDao)
   {
@@ -27,6 +27,7 @@ class PostService implements PostServiceInterface
 
   /**
    * Get Post List
+   * 
    * @return $postList
    */
    public function getPostListBySearch(Request $request)
@@ -36,6 +37,7 @@ class PostService implements PostServiceInterface
 
    /**
     * Find Post By Id
+
     * @param Request $request
     * @return post
     */
@@ -45,7 +47,8 @@ class PostService implements PostServiceInterface
   }
 
   /**
-   * save post
+   * Save post
+   * 
    * @param Request $request
    * @param User $user
    * @return post
@@ -56,7 +59,8 @@ class PostService implements PostServiceInterface
    }
 
    /**
-    * Delete post
+    * SoftDelete post
+    *
     * @param Post $post
     */
   public function destoryPost(Post $post) {

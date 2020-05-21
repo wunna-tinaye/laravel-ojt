@@ -15,6 +15,6 @@ interface PostServiceInterface
   public function saveOrUpdatePost(Request $request, User $user);
   //destory post
   public function destoryPost(Post $post);
-  //import
+  //import file
   public function import(Request $request);
 }

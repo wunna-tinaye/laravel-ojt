@@ -15,10 +15,14 @@ class CheckRoleForPostEdit
      */
     public function handle($request, Closure $next)
     {
-        $post = Post::find($request->route('post')->id);
-        if (auth()->user()->type == config('constants.admin') || (auth()->user()->type == config('constants.user') && auth()->user()->id == $post->create_user_id)) {
-            return $next($request);
+        if(auth()->user()){
+            $post = Post::find($request->route('post')->id);
+            if (auth()->user()->type == config('constants.admin') || (auth()->user()->type == config('constants.user') && auth()->user()->id == $post->create_user_id)) {
+                return $next($request);
+            }
+            return redirect(route('posts.index'))->with('status', 'You don\'t have permission');
+        } else {
+            return redirect(route('posts.index'));
         }
-        return redirect(route('posts.index'))->with('status', 'You don\'t have permission');
     }
 }

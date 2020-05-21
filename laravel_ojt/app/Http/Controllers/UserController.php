@@ -129,8 +129,8 @@ class UserController extends Controller
 
     /**
      * Show the form for user's profile
-     * @param \App\Models\User  $user
      * 
+     * @param \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function profile(User $user)
@@ -140,8 +140,8 @@ class UserController extends Controller
 
     /**
      * Show the form for confirming of editing resource
-     * @param \Illuminate\Http\Request  $request
      * 
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function updateConfirm(UserRequest $request)
@@ -153,8 +153,8 @@ class UserController extends Controller
 
     /**
      * Show the form for password change
-     * @param \App\Models\User  $user
      * 
+     * @param \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function changePassword(User $user)
@@ -164,9 +164,9 @@ class UserController extends Controller
 
     /**
      * Store change password into storage
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
-     * 
      * @return \Illuminate\Http\Response
      */
     public function changedPassword(Request $request,User $user)

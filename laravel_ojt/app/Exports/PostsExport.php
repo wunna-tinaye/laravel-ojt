@@ -12,6 +12,14 @@ class PostsExport implements FromCollection
     */
     public function collection()
     {
-        return Post::all();
+        if(auth()->user()){
+            if(auth()->user()->type == config('constants.admin')) {
+                return Post::all();
+            } else {
+                return Post::where('create_user_id' , '=' , auth()->user()->id)->get();
+            }
+        } else {
+            return Post::all();
+        }
     }
 }

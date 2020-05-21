@@ -14,7 +14,7 @@
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="id" class="form-control col-sm-6" value="{{$post->id}}">
-                <input type="hidden" name="status" class="form-control col-sm-6" value="{{$post->status}}">
+                <input type="hidden" name="status" class="form-control col-sm-6" value="{{$request->status}}">
         @endif
 
                 @csrf
@@ -34,7 +34,7 @@
                 <div class="form-group input-group">
                     <label  class="col-sm-2"> Status </label>
                     <label class="switch">
-                        <input type="checkbox" {{$request->status ? 'checked' : ''}} disabled>
+                        <input type="checkbox" {{$request->status ? 'checked' : 'unchecked'}} disabled>
                         <span class="slider round"></span>
                     </label>
                 </div>
