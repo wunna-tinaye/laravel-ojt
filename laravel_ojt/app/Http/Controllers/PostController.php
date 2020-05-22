@@ -107,11 +107,15 @@ class PostController extends Controller
      */
     public function updateConfirm(PostRequest $request)
     {
+        $status = 0;
+        if(!empty($request->status)) {
+            $status = $request->status;
+        }
         $validated = $request->validated();
         session([
             'title' => $request->title,
             'description' => $request->description,
-            'status' => $request->status,
+            'status' => $status,
         ]);
         $post = $this->postInterface->findPostById($request);
         return view('posts.confirm', compact('request', 'post'));
