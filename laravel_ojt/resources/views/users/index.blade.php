@@ -34,7 +34,7 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->c_name }}</td>
                     <td>{{ $user->phone }}</td>
-                    <td>{{ date('d/m/Y', strtotime($user->dob)) }}</td>
+                    <td>{{ $user->dob ? date('d/m/Y', strtotime($user->dob)) : '' }}</td>
                     <td>{{ $user->address }}</td>
                     <td>{{ $user->created_at->format('d/m/Y') }}</td>
                     <td>{{ $user->updated_at->format('d/m/Y') }}</td>
@@ -79,7 +79,7 @@
                                 </tr>
                                 <tr>
                                     <td><span class="col-sm-8">Birth Date</span></td>
-                                    <td><span class="col-sm-3">{{ date('d/m/Y', strtotime($user->dob)) }}</span></td>
+                                    <td><span class="col-sm-3">{{ $user->dob ? date('d/m/Y', strtotime($user->dob)) : '' }}</span></td>
                                 </tr>
                                 <tr>
                                     <td><span class="col-sm-8">Address</span></td>

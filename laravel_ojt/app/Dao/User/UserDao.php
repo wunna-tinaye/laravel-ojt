@@ -52,7 +52,6 @@ class UserDao implements UserDaoInterface
       $userE->updated_user_id = $user->id;
       $userE->save();
     } else {
-
         User::create([
           'name' => $request->name,
           'email' => $request->email,

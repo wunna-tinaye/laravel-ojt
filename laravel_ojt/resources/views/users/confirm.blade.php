@@ -28,11 +28,11 @@
                     <input type="hidden" name="email" class="form-control col-sm-6" value="{{$request->email}}">
                 </div>
 
+                @if($request->action == "create")
                 <div class="form-group input-group">
                     <label class="col-sm-4">Password</label>
-                    <label class="col-sm-4">********</label>
-                    <input type="hidden" name="password" class="form-control col-sm-6" value="{{$request->password}}">
-                </div>
+                    <input type="password" name="password" readonly  class="form-control-plaintext col-sm-6" id="password_confirm" value="{{$request->password}}">                </div>
+                @endif
 
                 <div class="form-group input-group">
                     <label class="col-sm-4">Type</label>

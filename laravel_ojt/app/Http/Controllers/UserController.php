@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserConfirmRequest;
+use App\Http\Requests\UserUpdateConfirmRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Contracts\Services\User\UserServiceInterface;
+use Log;
 
 
 class UserController extends Controller
@@ -56,12 +59,8 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-     public function confirm(UserRequest $request)
+     public function confirm(UserConfirmRequest $request)
     {
-        $request->validate([
-            'password' => 'required|string|min:8|confirmed',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|required_if:back_image,',
-        ]);
         $this->userInterface->confirm($request);
         return view('users.confirm', compact('request'));
     }
@@ -144,7 +143,7 @@ class UserController extends Controller
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function updateConfirm(UserRequest $request)
+    public function updateConfirm(UserUpdateConfirmRequest $request)
     {
         $user = $this->userInterface->findUserById($request);
         $this->userInterface->updateConfirm($request, $user);
@@ -169,13 +168,8 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function changedPassword(Request $request,User $user)
+    public function changedPassword(ChangePasswordRequest $request,User $user)
     {
-        $request->validate([
-            'old_password' => 'required',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
         if(!Hash::check($request->old_password, $user->password)){
             return back()->with('error','The specified password does not match the database password');
         }else{

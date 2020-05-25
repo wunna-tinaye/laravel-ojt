@@ -11,7 +11,11 @@
                 @csrf
                 <div class="form-group input-group">
                     <label class="col-sm-3">Name </label>
+                    @if(session()->has('name'))
                     <input type="text" name="name" class="form-control col-sm-6" value="{{ session('name') }}">
+                    @else
+                    <input type="text" name="name" class="form-control col-sm-6" value="{{ old('name') }}">
+                    @endif
                     @error('name')
                         <p class="text-danger">&nbsp;*{{ $message }}</p>
                     @enderror
@@ -19,7 +23,11 @@
 
                 <div class="form-group input-group">
                     <label class="col-sm-3">Email Address </label>
+                    @if(session()->has('email'))
                     <input type="email" name="email" class="form-control col-sm-6" value="{{ session('email') }}">
+                    @else
+                    <input type="email" name="email" class="form-control col-sm-6" value="{{ old('email') }}">
+                    @endif
                     @error('email')
                         <p class="text-danger">&nbsp;*{{ $message }}</p>
                     @enderror
@@ -27,7 +35,11 @@
 
                 <div class="form-group input-group">
                     <label class="col-sm-3">Password</label>
+                    @if(session()->has('password'))
                     <input type="password" name="password" class="form-control col-sm-6" value="{{ session('password') }}">
+                    @else
+                    <input type="password" name="password" class="form-control col-sm-6" value="{{ old('password') }}">
+                    @endif
                     @error('password')
                         <p class="text-danger">&nbsp;*{{ $message }}</p>
                     @enderror
@@ -35,15 +47,24 @@
 
                 <div class="form-group input-group">
                     <label class="col-sm-3">Confirm Password</label>
+                    @if(session()->has('password_confirmation'))
                     <input type="password" name="password_confirmation" class="form-control col-sm-6" value="{{ session('password_confirmation') }}">
+                    @else
+                    <input type="password" name="password_confirmation" class="form-control col-sm-6" value="{{ old('password_confirmation') }}">
+                    @endif
                 </div>
 
                 <div class="form-group input-group">
                     <label class="col-sm-3">Type</label>
                     <select name="type" class="form-control col-sm-6">
                         <option></option>
+                        @if(session()->has('type'))
                         <option value="1" {{ session( 'type' ) == config('constants.admin') ? 'selected' : ''  }}>Admin</option>
                         <option value="2" {{ session( 'type' ) == config('constants.user') ? 'selected' : ''  }}>User</option>
+                        @else
+                        <option value="1" {{ old( 'type' ) == config('constants.admin') ? 'selected' : ''  }}>Admin</option>
+                        <option value="2" {{ old( 'type' ) == config('constants.user') ? 'selected' : ''  }}>User</option>
+                        @endif
                     </select>
                     @error('type')
                         <p class="text-danger">&nbsp;*{{ $message }}</p>
@@ -52,17 +73,29 @@
 
                 <div class="form-group input-group">
                     <label class="col-sm-3">Phone</label>
+                    @if(session()->has('ph'))
                     <input type="number" name="ph" class="form-control col-sm-6" value="{{ session('ph') }}">
+                    @else
+                    <input type="number" name="ph" class="form-control col-sm-6" value="{{ old('ph') }}">
+                    @endif
                 </div>
 
                 <div class="form-group input-group">
                     <label class="col-sm-3">Date of birth </label>
+                    @if(session()->has('dob'))
                     <input class="datepicker col-sm-6" type = "date" name="dob" value="{{ session('dob') }}"></textarea>
+                    @else
+                    <input class="datepicker col-sm-6" type = "date" name="dob" value="{{ old('dob') }}"></textarea>
+                    @endif
                 </div>
 
                 <div class="form-group input-group">
                     <label class="col-sm-3">Address</label>
+                    @if(session()->has('address'))
                     <textarea name="address" class="form-control col-sm-6" rows="5" cols="20"> {{ session('address') }}</textarea>
+                    @else
+                    <textarea name="address" class="form-control col-sm-6" rows="5" cols="20"> {{ old('address') }}</textarea>
+                    @endif
                 </div>
 
                 <div class="form-group input-group">

@@ -2,7 +2,7 @@
    
 return [
   
-    'user_pagination_records' => 5,
+    'user_pagination_records' => 7,
 
     'admin_pagination_records' => 7,
   

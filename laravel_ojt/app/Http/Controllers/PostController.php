@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use App\Http\Request\PostFileRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Contracts\Services\Post\PostServiceInterface;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,6 +24,8 @@ class PostController extends Controller
     {
         $this->middleware('checkRoleForPostEdit')->only('edit');
         $this->middleware('checkGuestUser')->only('create');
+        $this->middleware('checkGuestUser')->only('upload');
+
         $this->postInterface = $postInterface;
     }
 
@@ -56,7 +59,6 @@ class PostController extends Controller
      */
     public function confirm(PostRequest $request)
     {
-        $validated = $request->validated();
         session([
             'title' => $request->title,
             'description' => $request->description
@@ -111,7 +113,6 @@ class PostController extends Controller
         if(!empty($request->status)) {
             $status = $request->status;
         }
-        $validated = $request->validated();
         session([
             'title' => $request->title,
             'description' => $request->description,
@@ -173,12 +174,9 @@ class PostController extends Controller
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Support\Collection
      */
-    public function import(Request $request) 
+    public function import(PostFileRequest $request) 
     {
-        $request->validate([
-        'file' => 'required|max:2048',
-    ]);
-    $import = $this->postInterface->import($request);
-    return $import;
+        $import = $this->postInterface->import($request);
+        return $import;
     }
 }

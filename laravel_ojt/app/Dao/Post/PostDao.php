@@ -21,9 +21,6 @@ class PostDao implements PostDaoInterface
             $post = $post->where('title', 'like', '%' . $request->search . '%')
                             ->orWhere('description', 'like', '%' . $request->search . '%');
         }
-        if (auth()->user()->type == config('constants.user')) {
-            $post = $post->where('posts.create_user_id', '=' , auth()->user()->id);
-        }
         return $post->paginate(auth()->user()->type == config('constants.admin') ? config('constants.admin_pagination_records') : config('constants.user_pagination_records'), array('posts.*', 'u.name as c_name'));
       } else {
           if (isset($request->search) && !empty($request->search)) {
