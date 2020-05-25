@@ -10,8 +10,6 @@ use App\Http\Requests\ChangePasswordRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Contracts\Services\User\UserServiceInterface;
-use Log;
-
 
 class UserController extends Controller
 {
